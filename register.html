@@ -322,11 +322,20 @@ gapi.load('auth2', function() {
 
 // Register new user with Google credential
 function createUserWithCredential(credential) {
-  return createUserWithEmailAndPassword(auth, "dummy@example.com", "password") // Email and password are required, but you can change them
+  return signInWithCredential(auth, credential)
     .then((userCredential) => {
-      // Link Google credential
+      // Signed in
       const user = userCredential.user;
-      return linkWithCredential(user, credential);
+      console.log(user);
+      alert(user.email + " Logged in successfully!");
+      document.getElementById('logout').style.display = 'block';
+      displayUserCredentials(user);
+      displayNotes(user);
+      displayCauses(user); // Call the displayCauses function here
+      // Show the container with user credentials, notes, and "My Notes" heading
+      document.getElementById("loggedInContainer").style.display = "block";
+      // Attach event listeners for delete buttons after successful login
+      attachDeleteEventListeners(user);
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -335,6 +344,7 @@ function createUserWithCredential(credential) {
       alert("Failed to register with Google.");
     });
 }
+
 
 // Link Google credential with existing user
 function linkWithCredential(user, credential) {
