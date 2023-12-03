@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- Bootstrap theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <!-- Fonts -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:400,700">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Manrope:400,700">
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Fraunces:400,700">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="main.css">
+
+  <link rel="icon" type="image/png" href="images/small_logo.png">
+
+  <title>Explore Posts</title>
+  <style>
+   .form-group label {
+        color: #fff; /* Updated color */
+        font-weight: bold;
+        font-family: 'Poppins', sans-serif; /* Updated font */
+    }
+
+    .form-control {
+        border-color: #fff; /* Updated color */
+        border-radius: 0;
+        font-family: 'Poppins', sans-serif; /* Updated font */
+    }
+
+    .btn-success {
+        color: #fff;
+        background-color: #4e70be;
+        border-color: #4e70be;
+        border-radius: 50px;
+        transition: background-color 0.2s ease-in-out;
+        font-family: 'Fraunces', sans-serif;
+    }
+
+    .btn-success:hover {
+        background-color: #0056b3;
+    }
+
+    .note-container {
+        margin-top: 30px;
+    }
+
+    .note {
+        border: 1px solid #fff; /* Updated color */
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #242424; /* Updated color */
+        border-radius: 5px;
+        font-family: 'Poppins', sans-serif; /* Updated font */
+        color: white; /* Updated color */
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .slide-in-right {
+        animation: slideInRight 0.5s ease-in;
+    }
+
+    @keyframes slideInRight {
+        from { transform: translateX(100%); }
+        to { transform: translateX(0); }
+    }
+
+    .auth-section {
+        border: 1px solid #fff; /* Updated color */
+        padding: 20px;
+        background-color: #242424; /* Updated color */
+        border-radius: 5px;
+        box-shadow: 0 2px 6px rgba(255, 255, 255, 0.2); /* Updated color */
+        margin-bottom: 20px;
+    }
+
+    .auth-section h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #fff;
+        font-size: 28px;
+        font-family: 'Poppins', sans-serif; /* Updated font */
+    }
+
+    .auth-section button {
+        width: 100%;
+        margin-top: 10px;
+        border-radius: 50px;
+        font-family: 'Fraunces', sans-serif;
+    }
+
+    .auth-section img {
+        display: block;
+        margin: 0 auto;
+        margin-top: 30px;
+        max-width: 100%;
+    }
+
+    footer {
+        text-align: center;
+        font-family: 'Poppins', sans-serif; /* Updated font */
+    }
+
+    footer p {
+        margin: 0;
+        color: #fff;
+    }
+  </style>
+</head>
+<body> 
+  <div class="navbar">
+    <div class="logo">
+        <img src="images/small_logo.png" alt="Logo">
+    </div>
+    
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="blog.html">Blog</a>
+        <a href="explore.html">Explore Posts</a>
+    </div>
+
+    <div class="login-signup">
+        <button><a href="register.html">Log In/Sign Up</a></button>
+    </div>
+</div>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="explore-section fade-in">
+          <h2>Explore Causes</h2>
+          <div id="exploreCauseList"></div>
+        </div>
+      </div><!-- end col -->
+    </div><!--  end row -->
+  </div>
+  <footer class="container fade-in">
+    <hr>
+    <p>&copy; 2023 Smart$uccess. All rights reserved.</p>
+  </footer>
+</body>
+<script type="module">
+
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  // Your existing Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDuS4983E91E57viKdfYzLWlVjz4dICnFc",
+      authDomain: "smart-success-b9a92.firebaseapp.com",
+      projectId: "smart-success-b9a92",
+      storageBucket: "smart-success-b9a92.appspot.com",
+      messagingSenderId: "651022652129",
+      appId: "1:651022652129:web:a7ee097baf3a09c85bdda0",
+      measurementId: "G-DHQ7JNGF1C"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const database = getDatabase();
+
+  const exploreCauseListDiv = document.getElementById("exploreCauseList");
+
+  // Display causes from the database
+  function displayCauses() {
+    const causesRef = ref(database, 'causes');
+    onValue(causesRef, (snapshot) => {
+      const causesData = snapshot.val();
+      if (causesData) {
+        exploreCauseListDiv.innerHTML = '';
+        Object.entries(causesData).forEach(([userId, userCauses]) => {
+          Object.entries(userCauses).forEach(([causeId, cause]) => {
+            const causeTitle = cause.title;
+            const targetAmount = cause.targetAmount;
+            const currentAmount = cause.currentAmount;
+            const isFulfilled = cause.isFulfilled;
+            const causeDiv = document.createElement('div');
+            causeDiv.className = 'note';
+            causeDiv.innerHTML = `
+              <p>User ID: ${userId}</p>
+              <p>Cause Title: ${causeTitle}</p>
+              <p>Target Amount: $${targetAmount}</p>
+              <p>Current Amount: $${currentAmount}</p>
+              <p>Status: ${isFulfilled ? 'Fulfilled' : 'Not Fulfilled'}</p>
+            `;
+            exploreCauseListDiv.appendChild(causeDiv);
+          });
+        });
+      } else {
+        exploreCauseListDiv.innerHTML = '<p>No causes available.</p>';
+      }
+    });
+  }
+
+  // Call the function to display causes on page load
+  displayCauses();
+
+</script>
+</html>
