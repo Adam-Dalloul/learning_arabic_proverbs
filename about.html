@@ -9,7 +9,114 @@
     <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="icon" type="image/png" href="images/small_logo.png">
     <style>
-        
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-gap: 20px;
+            justify-items: center;
+            align-items: center;
+            margin: 20px;
+        }
+
+        /* Logos section */
+        .logos {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .logos img {
+            max-width: 50%;
+            max-height: 50%;
+        }
+
+        .logos:hover {
+            transform: scale(1.1);
+        }
+
+        .github-logo {
+            margin-left: auto;
+            margin-right: 2%;
+            grid-column: 1 / span 3;
+            grid-row: 3;
+            justify-content: flex-start;
+        }
+
+        .linkedin-logo {
+            margin-left: 15%;
+            grid-column: 2 / span 2;
+            grid-row: 3;
+            justify-content: center;
+        }
+
+        .medium-logo {
+            margin-left: 4%;
+            grid-column: 3;
+            grid-row: 3;
+            justify-content: flex-end;
+        }
+
+        /* My-portrait section */
+        .my-portrait {
+            grid-column: 3 / span 1;
+            grid-row: 1 / span 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 10px;
+        }
+
+        .my-portrait img {
+            max-width: 80%;
+            height: auto;
+        }
+
+        /* Personal statement section */
+        .personal-statement {
+            grid-column: 1 / span 2;
+            grid-row: 1 / span 2;
+            background-color: #333;
+            border-radius: 8px;
+            padding: 20px;
+            color: white;
+            text-align: center;
+            letter-spacing: 1px;
+            height: 80%; /* Fixed height */
+            width: 100%; /* Adjust the width as needed */
+        }
+
+        .personal-statement p {
+            font-size: 1.7vw; /* Adjusted font size for responsiveness */
+        }
+
+        /* Responsive adjustments */
+        @media screen and (max-width: 600px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .my-portrait {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .personal-statement {
+                grid-column: 1;
+                grid-row: 3;
+            }
+
+            .github-logo,
+            .linkedin-logo,
+            .medium-logo {
+                grid-column: 1; /* Adjusted to stack logos vertically on small screens */
+                justify-content: center; /* Center logos on small screens */
+            }
+        }
     </style>
 </head>
 
@@ -17,10 +124,10 @@
     <div class="navbar">
         <div class="logo">
             <a href="index.html">
-              <img src="images/small_logo.png" alt="Logo">
+                <img src="images/small_logo.png" alt="Logo">
             </a>
         </div>
-        
+
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="about.html" class="active">About</a>
@@ -30,12 +137,50 @@
 
         <div class="login-signup">
             <a href="register.html">
-            <button>Log In/Sign Up</button>
+                <button>Log In/Sign Up</button>
             </a>
         </div>
     </div>
 
-    <script type="text/javascript"></script>
+    <div class="grid-container">
+        <div id="about" class="grid-item my-portrait fade-in slide-up">
+            <img src="images/my-portrait.png" alt="My Portrait">
+        </div>
+
+        <div id="contact" class="grid-item personal-statement fade-in slide-up">
+            <p>As a high school student at Eastside Preparatory School, I'm really into computer science and business. I've been part of different programs that focus on business, so I've learned a lot about how it works. I'm planning to major in computer science and want to use what I know to make a difference in the tech world.
+
+                I came up with the idea for "Learning Arabic Proverbs" because I believe that understanding cultural things, like Arabic proverbs, can help people learn the language better and also get to know more about Arabic heritage. The app is all about making language learning fun and helping people appreciate the wisdom in Arabic proverbs. I'm excited to bring my love for tech and business into this project and hopefully make a positive impact in the language learning and cultural appreciation scene.
+            </p>
+        </div>
+
+        <div class="grid-item github-logo fade-in">
+            <a href="https://github.com/Adam-Dalloul" target="_blank">
+                <div class="logos">
+                    <img src="images/github-logo.png" alt="GitHub Logo">
+                </div>
+            </a>
+        </div>
+
+        <div class="grid-item linkedin-logo fade-in">
+            <a href="https://www.linkedin.com/in/adam-dalloul/" target="_blank">
+                <div class="logos">
+                    <img src="images/linkendin-logo.png" alt="Linkendin Logo">
+                </div>
+            </a>
+        </div>
+
+        <div class="grid-item medium-logo fade-in">
+            <a href="https://medium.com/@adam.dalloul" target="_blank">
+                <div class="logos">
+                    <img src="images/medium-logo.png" alt="Medium Logo">
+                </div>
+            </a>       
+        </div>
+        
+    </div>
+
+    <!-- Your existing HTML content here -->
 </body>
 
 </html>

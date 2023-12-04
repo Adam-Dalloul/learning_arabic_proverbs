@@ -89,5 +89,33 @@ body {
     left: -10%; /* Adjust to center the extended underline */
 }
 
+/* Mobile Optimizations */
+@media screen and (max-width: 600px) {
+  ul.navbar li {
+    float: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .personal-statement {
+    padding: 10px;
+  }
+
+  .footer-text {
+    font-size: 12px;
+  }
+}
+
 
 
