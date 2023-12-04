@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" ></script>
-  <!-- Bootstrap theme -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <!-- Theme -->
-  <link rel="stylesheet" type="text/css" href="main.css">
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-
-   <!-- Add the Cross-Origin-Opener-Policy header -->
-   <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
-  </head>
-  
+  <title>Login/Signup</title>
   <link rel="icon" type="image/png" href="images/small_logo.png">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js"></script>
+
+  <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
 
   <title>Login/Signup</title>
   <style>
@@ -242,7 +243,7 @@
   };
 
   // Add Google Web Client ID
-  const googleClientId = "651022652129-q3qeebt3ffonood4336fua5pu0vphvfb.apps.googleusercontent.com"; 
+  const googleClientId = "651022652129-1n2fqlaj787v6s30hp100g03445d6ivo.apps.googleusercontent.com"; 
   firebaseConfig.googleClientId = googleClientId;
 
   // Initialize Firebase
@@ -335,7 +336,6 @@ function createUserWithCredential(credential) {
       alert("Failed to register with Google.");
     });
 }
-
 
 
 // Link Google credential with existing user
