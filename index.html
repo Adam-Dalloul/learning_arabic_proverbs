@@ -9,7 +9,105 @@
     <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="icon" type="image/png" href="images/small_logo.png">
     <style>
-        
+        .home-banner {
+            background-color: #1a1a1a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .home-banner h2 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .home-banner p {
+            margin: 5px 0;
+        }
+
+        .home-banner .stats {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .home-banner .stats div {
+            margin: 0 20px;
+        }
+
+        .stats-number {
+            font-size: 32px;
+            font-weight: bold;
+            animation: spinAndFadeIn 1.5s ease-in-out;
+        }
+
+        .demo-video {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+
+        .feature {
+            flex: 1;
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+            background-color: #333;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .feature img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .feature:hover {
+            transform: scale(1.05);
+        }
+
+        /* Animation styles */
+        @keyframes spinAndFadeIn {
+            0% {
+                transform: rotate(0) scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: rotate(360deg) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .fade-in1 {
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+
+        .fade-in2 {
+            animation: fadeIn 1s ease-in-out 0.5s forwards;
+        }
+
+        .fade-in3 {
+            animation: fadeIn 1s ease-in-out 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
@@ -30,12 +128,73 @@
 
         <div class="login-signup">
             <a href="register.html">
-            <button>Log In/Sign Up</button>
+                <button>Log In/Sign Up</button>
             </a>
         </div>
     </div>
 
-    <script type="text/javascript"></script>
+    <div class="home-banner">
+        <h2>Welcome to Learning Arabic Proverbs!</h2>
+        <p>Explore the richness of Arabic language and culture with us.</p>
+        <div class="stats">
+            <div>
+                <p class="stats-number">1000+ </p>
+                <p>Proverbs</p>
+            </div>
+            <div>
+                <p class="stats-number">10,000+</p>
+                <p>People Advanced</p>
+            </div>
+            <div>
+                <p class="stats-number">4.8 ⭐</p>
+                <p>Star Review</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container features">
+        <div class="feature fade-in1"> 
+            <img src="images/feature1.png" alt="Feature 1" style="height: 135px">
+            <h3>Interactive Learning</h3>
+            <p>Engage with Arabic proverbs in an interactive and enjoyable way.</p>
+        </div>
+        <div class="feature fade-in2">
+            <img src="images/feature2.png" alt="Feature 2" >
+            <h3>Cultural Insights</h3>
+            <p>Gain insights into Arabic culture through the wisdom of proverbs.</p>
+        </div>
+        <div class="feature fade-in3">
+            <img src="images/feature3.png" alt="Feature 3" style="height: 153px">
+            <h3>Personalized Experience</h3>
+            <p>Tailored learning paths for individualized language learning.</p>
+        </div>
+    </div>
+
+    <div class="demo-video swipe-up">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/XIMLoLxmTDw?si=rW8a4ePLNNVAMN7m&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            const features = document.querySelectorAll('.feature');
+
+            // Set initial opacity to 0
+            features.forEach((feature) => {
+                feature.style.opacity = 0;
+            });
+
+            // Add fade-in class with delay to each feature
+            features.forEach((feature, index) => {
+                setTimeout(() => {
+                    feature.classList.add('fade-in' + (index + 1));
+                }, index * 500); // Adjust the delay as needed
+            });
+        });
+    </script>
+    
+    
+    
 </body>
 
 </html>

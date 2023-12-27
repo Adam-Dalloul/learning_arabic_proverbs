@@ -58,15 +58,6 @@
         color: white; /* Updated color */
     }
 
-    .fade-in {
-        animation: fadeIn 0.5s ease-in;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
     .slide-in-right {
         animation: slideInRight 0.5s ease-in;
     }
@@ -199,20 +190,32 @@
     <h2>My Notes</h2>
     <div id="noteList"></div>
 
-    <h2>Post Your Cause</h2>
+    <h2>Post Your Proverb</h2>
     <div class="form-group">
-      <label for="causeTitle">Cause Title</label>
-      <input type="text" id="causeTitle" class="form-control" placeholder="Enter cause title">
+      <label for="englishWord">English Word</label>
+      <input type="text" id="englishWord" class="form-control" placeholder="Enter English word">
     </div>
     <div class="form-group">
-      <label for="targetAmount">Target Amount ($)</label>
-      <input type="number" id="targetAmount" class="form-control" placeholder="Enter target amount">
+      <label for="arabicWord">Arabic Word</label>
+      <input type="text" id="arabicWord" class="form-control" placeholder="Enter Arabic word">
     </div>
-    <button type="button" id="postCause" class="btn btn-primary btn-round">Post Cause</button>
-    <h2>My Causes</h2>
-    <div id="causeList"></div>
+    <div class="form-group">
+      <label for="definition">Definition</label>
+      <textarea id="definition" class="form-control" rows="3" placeholder="Enter definition"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="exampleSentence">Example Sentence</label>
+      <textarea id="exampleSentence" class="form-control" rows="3" placeholder="Enter example sentence"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="extra">Extra</label>
+      <input type="text" id="extra" class="form-control" placeholder="Enter extra information">
+    </div>
+    <button type="button" id="postProverb" class="btn btn-primary btn-round">Post Proverb</button>
+    <h2>My Proverbs</h2>
+    <div id="proverbList"></div>
 
-    <a href="explore.html" target="_blank">Explore All Causes</a>
+    <a href="explore.html" target="_blank">Explore All Proverb Posts</a>
   </div>
   <footer class="container fade-in">
     <hr>
@@ -257,10 +260,102 @@
   const noteInput = document.getElementById("noteInput");
   const saveNoteButton = document.getElementById("saveNote");
   const noteListDiv = document.getElementById("noteList");
-  const causeTitleInput = document.getElementById("causeTitle");
-  const targetAmountInput = document.getElementById("targetAmount");
-  const postCauseButton = document.getElementById("postCause");
-  const causeListDiv = document.getElementById("causeList"); // Define the causeListDiv globally
+  
+  const postProverbButton = document.getElementById("postProverb");
+  const proverbListDiv = document.getElementById("proverbList");
+
+  postProverbButton.addEventListener("click", function() {
+    const user = auth.currentUser;
+    if (user) {
+      const userId = user.uid;
+      const englishWord = document.getElementById("englishWord").value.trim();
+      const arabicWord = document.getElementById("arabicWord").value.trim();
+      const definition = document.getElementById("definition").value.trim();
+      const exampleSentence = document.getElementById("exampleSentence").value.trim();
+      const extra = document.getElementById("extra").value.trim();
+      
+      if (englishWord !== '' && arabicWord !== '' && definition !== '' && exampleSentence !== '') {
+        const proverbsRef = ref(database, 'proverbs/' + userId);
+        const newProverbRef = push(proverbsRef); // Generate a unique key for the new proverb
+        set(newProverbRef, {
+          englishWord: englishWord,
+          arabicWord: arabicWord,
+          definition: definition,
+          exampleSentence: exampleSentence,
+          extra: extra
+        })
+        .then(() => {
+          alert("Proverb posted successfully!");
+          clearProverbFields();
+          displayProverbs(user); // Update proverbs list after posting
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Failed to post proverb!");
+        });
+      } else {
+        alert("Please fill in all required fields.");
+      }
+    } else {
+      alert("Please login to post a proverb.");
+    }
+  });
+
+  // Display user's posted proverbs
+  function displayProverbs(user) {
+    if (user) {
+      const userId = user.uid;
+      const proverbsRef = ref(database, 'proverbs/' + userId);
+      onValue(proverbsRef, (snapshot) => {
+        const proverbsData = snapshot.val();
+        if (proverbsData) {
+          proverbListDiv.innerHTML = '';
+          Object.entries(proverbsData).forEach(([proverbId, proverb]) => {
+            const proverbDiv = document.createElement('div');
+            proverbDiv.className = 'note';
+            proverbDiv.innerHTML = `
+              <p>English Word: ${proverb.englishWord}</p>
+              <p>Arabic Word: ${proverb.arabicWord}</p>
+              <p>Definition: ${proverb.definition}</p>
+              <p>Example Sentence: ${proverb.exampleSentence}</p>
+              <p>Extra: ${proverb.extra}</p>
+              <button class="btn btn-danger delete-proverb" data-proverb-id="${proverbId}">Delete</button>
+            `;
+            proverbListDiv.appendChild(proverbDiv);
+          });
+        } else {
+          proverbListDiv.innerHTML = '';
+        }
+      });
+    } else {
+      proverbListDiv.innerHTML = '';
+    }
+  }
+
+  // Function to clear proverb input fields
+  function clearProverbFields() {
+    document.getElementById("englishWord").value = '';
+    document.getElementById("arabicWord").value = '';
+    document.getElementById("definition").value = '';
+    document.getElementById("exampleSentence").value = '';
+    document.getElementById("extra").value = '';
+  }
+
+  // Function to delete a proverb
+  function deleteProverb(user, proverbId) {
+    const userId = user.uid;
+    const proverbRef = ref(database, `proverbs/${userId}/${proverbId}`);
+    set(proverbRef, null)
+      .then(() => {
+        alert('Proverb deleted successfully');
+        displayProverbs(user);
+      })
+      .catch((error) => {
+        console.error('Error deleting proverb:', error);
+        alert('Failed to delete proverb');
+      });
+  }
+
 
   // Register new user
   document.getElementById("register").addEventListener("click", function() {
@@ -375,7 +470,7 @@ gapi.load('auth2', function() {
         document.getElementById('logout').style.display = 'block';
         displayUserCredentials(user);
         displayNotes(user);
-        displayCauses(user); // Call the displayCauses function here
+        displayProverbs(user);
         // Show the container with user credentials, notes, and "My Notes" heading
         document.getElementById("loggedInContainer").style.display = "block";
         // Attach event listeners for delete buttons after successful login
@@ -408,7 +503,7 @@ document.getElementById("login").addEventListener("click", function() {
     document.getElementById('logout').style.display = 'block';
     displayUserCredentials(user);
     displayNotes(user);
-    displayCauses(user); // Call the displayCauses function here
+    displayProverbs(user);
     // Show the container with user credentials, notes, and "My Notes" heading
     document.getElementById("loggedInContainer").style.display = "block";
     // Attach event listeners for delete buttons after successful login
@@ -512,72 +607,6 @@ function displayUserCredentials(user) {
     }
   }
 
-   // Display user's posted causes
-  function displayCauses(user) {
-    if (user) {
-      const userId = user.uid;
-      const causesRef = ref(database, 'causes/' + userId);
-      onValue(causesRef, (snapshot) => {
-        const causesData = snapshot.val();
-        if (causesData) {
-          causeListDiv.innerHTML = '';
-          Object.entries(causesData).forEach(([causeId, cause]) => {
-            const causeTitle = cause.title;
-            const targetAmount = cause.targetAmount;
-            const currentAmount = cause.currentAmount;
-            const isFulfilled = cause.isFulfilled;
-            const causeDiv = document.createElement('div');
-            causeDiv.className = 'note';
-            causeDiv.innerHTML = `
-              <p>Cause Title: ${causeTitle}</p>
-              <p>Target Amount: $${targetAmount}</p>
-              <p>Current Amount: $${currentAmount}</p>
-              <p>Status: ${isFulfilled ? 'Fulfilled' : 'Not Fulfilled'}</p>
-              <button class="btn btn-danger delete-cause" data-cause-id="${causeId}">Delete</button>
-            `;
-            causeListDiv.appendChild(causeDiv);
-          });
-        } else {
-          causeListDiv.innerHTML = '';
-        }
-      });
-    } else {
-      causeListDiv.innerHTML = '';
-    }
-  }
-
-// Post a new cause
-postCauseButton.addEventListener("click", function() {
-  const user = auth.currentUser;
-  if (user) {
-    const userId = user.uid;
-    const causeTitle = causeTitleInput.value.trim();
-    const targetAmount = parseInt(targetAmountInput.value);
-    if (causeTitle !== '' && !isNaN(targetAmount) && targetAmount > 0) {
-      const causesRef = ref(database, 'causes/' + userId);
-      const newCauseRef = push(causesRef); // Generate a unique key for the new cause
-      set(newCauseRef, {
-        title: causeTitle,
-        targetAmount: targetAmount,
-        currentAmount: 0,
-        isFulfilled: false
-      })
-      .then(() => {
-        alert("Cause posted successfully!");
-        causeTitleInput.value = '';
-        targetAmountInput.value = '';
-        displayCauses(user); // Update causes list after posting
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("Failed to post cause!");
-      });
-    }
-  } else {
-    alert("Please login to post a cause.");
-  }
-});
-
 // Delete a note
 function deleteNote(user, noteId) {
   const userId = user.uid;
@@ -593,21 +622,6 @@ function deleteNote(user, noteId) {
     });
 }
 
-// Delete a cause
-function deleteCause(user, causeId) {
-  const userId = user.uid;
-  const causeRef = ref(database, `causes/${userId}/${causeId}`);
-  set(causeRef, null)
-    .then(() => {
-      alert('Cause deleted successfully');
-      displayCauses(user);
-    })
-    .catch((error) => {
-      console.error('Error deleting cause:', error);
-      alert('Failed to delete cause');
-    });
-}
-
 
 // Function to attach event listeners for delete buttons
 function attachDeleteEventListeners(user) {
@@ -619,13 +633,14 @@ function attachDeleteEventListeners(user) {
     }
   });
 
-  // Delete cause event listener
-  causeListDiv.addEventListener('click', function(event) {
-    if (event.target.classList.contains('delete-cause')) {
-      const causeId = event.target.getAttribute('data-cause-id');
-      deleteCause(user, causeId);
+  // Attach event listener for delete proverb button
+  proverbListDiv.addEventListener('click', function(event) {
+    if (event.target.classList.contains('delete-proverb')) {
+      const proverbId = event.target.getAttribute('data-proverb-id');
+      deleteProverb(user, proverbId);
     }
   });
+
 }
 
 </script>

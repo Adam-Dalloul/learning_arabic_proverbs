@@ -16,6 +16,65 @@
 
   <link rel="icon" type="image/png" href="images/small_logo.png">
 
+  <!-- Firebase -->
+    <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
+
+  // Your Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDjXTh0bPEyN9QMgmigWwmgcZvLZm42A2k",
+    authDomain: "learning-arabic-proverbs-new.firebaseapp.com",
+    projectId: "learning-arabic-proverbs-new",
+    storageBucket: "learning-arabic-proverbs-new.appspot.com",
+    messagingSenderId: "924783571778",
+    appId: "1:924783571778:web:f67d2c7a361e9b173e8edb",
+    measurementId: "G-B10QN62DNK"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  function displayProverbs() {
+    const proverbListDiv = document.getElementById("exploreProverbList");
+    const proverbsRef = ref(database, "proverbs");
+
+    onValue(proverbsRef, (snapshot) => {
+      const proverbsData = snapshot.val();
+
+      console.log("Proverbs Data:", proverbsData);
+
+      if (proverbsData) {
+      proverbListDiv.innerHTML = '';
+
+      // Iterate through the outer layer
+      Object.entries(proverbsData).forEach(([outerKey, outerValue]) => {
+        // Iterate through the inner layer
+        Object.entries(outerValue).forEach(([innerKey, proverb]) => {
+          const proverbDiv = document.createElement('div');
+          proverbDiv.className = 'note';
+          proverbDiv.innerHTML = `
+            <p>English Word: ${proverb.englishWord}</p>
+            <p>Arabic Word: ${proverb.arabicWord}</p>
+            <p>Definition: ${proverb.definition}</p>
+            <p>Example Sentence: ${proverb.exampleSentence}</p>
+            <p>Extra: ${proverb.extra}</p>
+          `;
+          proverbListDiv.appendChild(proverbDiv);
+        });
+      });
+    } else {
+      proverbListDiv.innerHTML = '<p>No proverbs found.</p>';
+    }
+    }, (error) => {
+      console.error("Error fetching proverbs:", error);
+    });
+  }
+
+  displayProverbs();
+    </script>
+
   <title>Explore Posts</title>
   <style>
    .form-group label {
@@ -57,14 +116,6 @@
         color: white; /* Updated color */
     }
 
-    .fade-in {
-        animation: fadeIn 0.5s ease-in;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
 
     .slide-in-right {
         animation: slideInRight 0.5s ease-in;
@@ -143,7 +194,7 @@
       <div class="col-sm-12">
         <div class="explore-section fade-in">
           <h2>Explore Posts</h2>
-          <div id="exploreCauseList"></div>
+          <div id="exploreProverbList"></div>
         </div>
       </div><!-- end col -->
     </div><!--  end row -->
@@ -153,66 +204,5 @@
     <p>&copy; All rights reserved.</p>
   </footer>
 </body>
-<script type="module">
 
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  // Your existing Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyDuS4983E91E57viKdfYzLWlVjz4dICnFc",
-      authDomain: "smart-success-b9a92.firebaseapp.com",
-      projectId: "smart-success-b9a92",
-      storageBucket: "smart-success-b9a92.appspot.com",
-      messagingSenderId: "651022652129",
-      appId: "1:651022652129:web:a7ee097baf3a09c85bdda0",
-      measurementId: "G-DHQ7JNGF1C"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const database = getDatabase();
-
-  const exploreCauseListDiv = document.getElementById("exploreCauseList");
-
-  // Display causes from the database
-  function displayCauses() {
-    const causesRef = ref(database, 'causes');
-    onValue(causesRef, (snapshot) => {
-      const causesData = snapshot.val();
-      if (causesData) {
-        exploreCauseListDiv.innerHTML = '';
-        Object.entries(causesData).forEach(([userId, userCauses]) => {
-          Object.entries(userCauses).forEach(([causeId, cause]) => {
-            const causeTitle = cause.title;
-            const targetAmount = cause.targetAmount;
-            const currentAmount = cause.currentAmount;
-            const isFulfilled = cause.isFulfilled;
-            const causeDiv = document.createElement('div');
-            causeDiv.className = 'note';
-            causeDiv.innerHTML = `
-              <p>User ID: ${userId}</p>
-              <p>Cause Title: ${causeTitle}</p>
-              <p>Target Amount: $${targetAmount}</p>
-              <p>Current Amount: $${currentAmount}</p>
-              <p>Status: ${isFulfilled ? 'Fulfilled' : 'Not Fulfilled'}</p>
-            `;
-            exploreCauseListDiv.appendChild(causeDiv);
-          });
-        });
-      } else {
-        exploreCauseListDiv.innerHTML = '<p>No causes available.</p>';
-      }
-    });
-  }
-
-  // Call the function to display causes on page load
-  displayCauses();
-
-</script>
 </html>

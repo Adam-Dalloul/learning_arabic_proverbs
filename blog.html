@@ -9,7 +9,43 @@
     <link rel="stylesheet" type="text/css" href="main.css">
     <link rel="icon" type="image/png" href="images/small_logo.png">
     <style>
-        
+        .blog-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .blog-item {
+            background-color: #242424;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(255, 255, 255, 0.2);
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .blog-item:hover {
+            transform: scale(1.05);
+        }
+
+        .blog-item img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .blog-content {
+            max-width: 800px;
+            margin: 20px auto;
+            color: #fff;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
     </style>
 </head>
 
@@ -29,11 +65,39 @@
         </div>
 
         <div class="login-signup">
-            <button><a href="register.html">Log In/Sign Up</a></button>
+            <a href="register.html">
+                <button>Log In/Sign Up</button>
+            </a>
         </div>
     </div>
 
-    <script type="text/javascript"></script>
+    <div class="blog-menu">
+        <!-- Blog Item 1 -->
+        <div class="blog-item fade-in" onclick="animateBlogTransition('articles/article1.html');">
+            <img src="images/article-covers/article1_cover.png" alt="Blog 1 Image">
+            <h2>Introduction to Arabic Proverbs</h2>
+            <p>Explore the significance of Arabic proverbs and their vital role in language learning.</p>
+        </div>
+    
+        <!-- Add more blog items here with similar structure -->
+    </div>
+    
+
+    <script type="text/javascript">
+        function animateBlogTransition(destination) {
+    const blogItem = document.querySelector('.blog-item');
+
+    // Add a class for the exit animation
+    blogItem.classList.add('exit-animation');
+
+    // Wait for the animation to complete before navigating to the destination
+    setTimeout(() => {
+        location.href = destination;
+    }, 1000); // Adjust the delay to match the exit animation duration
+}
+
+
+    </script>
 </body>
 
 </html>
