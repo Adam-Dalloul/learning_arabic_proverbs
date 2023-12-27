@@ -55,8 +55,8 @@
           const proverbDiv = document.createElement('div');
           proverbDiv.className = 'note';
           proverbDiv.innerHTML = `
-            <p>English Word: ${proverb.englishWord}</p>
-            <p>Arabic Word: ${proverb.arabicWord}</p>
+            <p>English Translation: ${proverb.englishWord}</p>
+            <p>Arabic Translation: ${proverb.arabicWord}</p>
             <p>Definition: ${proverb.definition}</p>
             <p>Example Sentence: ${proverb.exampleSentence}</p>
             <p>Extra: ${proverb.extra}</p>
@@ -166,6 +166,36 @@
         margin: 0;
         color: #fff;
     }
+
+    .explore-section {
+        position: relative;
+    }
+
+    .info-icon {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+    }
+
+    .info-tooltip {
+        display: none;
+        position: absolute;
+        top: 30px;
+        right: 5px;
+        background-color: #fff;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        font-size: small;
+        color: black;
+    }
+
+    .info-icon:hover + .info-tooltip {
+        display: block;
+    }
   </style>
 </head>
 <body> 
@@ -189,16 +219,22 @@
       </a>
   </div>
 </div>
-  <div class="container">
+<div class="container">
     <div class="row">
-      <div class="col-sm-12">
-        <div class="explore-section fade-in">
-          <h2>Explore Posts</h2>
-          <div id="exploreProverbList"></div>
-        </div>
-      </div><!-- end col -->
+        <div class="col-sm-12">
+            <div class="explore-section fade-in">
+                <h2>
+                    Explore Posts
+                    <span class="info-icon" title="Information">&#9432;</span>
+                    <div class="info-tooltip fade-in">
+                        Here, people can post their own proverbs with definitions, translations and more.
+                    </div>
+                </h2>
+                <div id="exploreProverbList"></div>
+            </div>
+        </div><!-- end col -->
     </div><!--  end row -->
-  </div>
+</div>
   <footer class="container fade-in">
     <hr>
     <p>&copy; All rights reserved.</p>
